@@ -52,6 +52,7 @@ router.post('/translate', function (req, res) {
                 res.set("from-language", result.from.language.iso);
                 res.set("to-language", translateTo);
                 res.set("translate-success", true);
+                res.set("cache", false);
                 res.end(result.text);
             }).catch(err => {
                 res.set("translate-success", false);
@@ -62,6 +63,7 @@ router.post('/translate', function (req, res) {
             res.set("from-language", translateResult.from);
             res.set("to-language", translateTo);
             res.set("translate-success", true);
+            res.set("cache", true);
             res.end(translateResult.text);
         }
     });
