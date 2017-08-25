@@ -47,7 +47,7 @@ router.post('/translate', function (req, res) {
             //Do translate
             translate(text, translateSetting).then(result => {
                 //Set redis cache
-                client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', 86400);
+                client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', 3600);
 
                 res.set("from-language", result.from.language.iso);
                 res.set("to-language", translateTo);
