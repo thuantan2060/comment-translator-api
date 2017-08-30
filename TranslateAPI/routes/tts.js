@@ -27,6 +27,70 @@ function TextsResponse(res, texts, success = false, cache = false) {
     });
 }
 
+function breakSentence(text, maxLength = 200, endSentence = '.') {
+    var breakTexts = [];
+    var size = text.length;
+    var index = 0;
+    var offset = 0;
+
+    while (index < size) {
+        if (index - offset > maxLength || text[index] == '.') {
+            breakTexts.push(text.substring(offset, index));
+            offset = index+1;
+        }
+
+        index++;
+    }
+
+    if (size == index && index > offset + 1) {
+        breakTexts.push(text.substring(offset, size));
+    }
+
+    return breakTexts;
+
+    //var sentences = text.split(endSentence);
+    //var breakTexts = [];
+
+    //for (var i = 0; i < sentences.length;) {
+
+    //    if (sentences[i].length > maxLength) {
+    //        //Try break this sentence with comma
+    //        var breakByCommas = breakSentence(sentences[i], maxLength, ',');
+
+    //        if (breakByCommas.length > 1) {
+
+    //        } else {
+    //            breakTexts.concat(chunkString(sentences[i++], maxLength));
+    //        }
+    //    } else {
+    //        var text = "";
+    //        while (i < sentences.length && text.length + sentences[i].length < maxLength) {
+    //            text += sentences[i++];
+    //        }
+    //        breakTexts.push(text);
+    //    }
+    //}
+
+    return breakTexts;
+}
+
+function chunkString(str, len) {
+    var _size = Math.ceil(str.length / len),
+        _ret = new Array(_size),
+        _offset;
+
+    for (var _i = 0; _i < _size; _i++) {
+        _offset = _i * len;
+        _ret[_i] = str.substring(_offset, _offset + len);
+    }
+
+    return _ret;
+}
+
+router.post('/test', function (req, res) {
+    res.json(breakSentence(req.body + ""));
+});
+
 //TTS sentence
 router.post('/sentence', function (req, res) {
     var request = {};
