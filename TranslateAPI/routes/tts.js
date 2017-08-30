@@ -64,9 +64,9 @@ router.post('/sentence', function (req, res) {
             googleTTS(request.text, request.from, request.speed)
                 .then(function (url) {
                     //Set redis cache
-                    client.set(key, url, 'EX', expire);
+                    client.set(key, [url], 'EX', expire);
                     //Send response
-                    TextResponse(res, url, true, false);
+                    TextResponse(res, [url], true, false);
                 })
                 .catch(function (err) {
 
@@ -76,7 +76,7 @@ router.post('/sentence', function (req, res) {
         } else {
 
             //Send response
-            SentenceResponse(res, reply, true, true);
+            TextResponse(res, reply, true, true);
         }
     });
 });
