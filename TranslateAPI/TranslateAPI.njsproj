@@ -37,13 +37,16 @@ REDIS_EXPIRE=3600</Environment>
     <Compile Include="routes\index.js" />
     <Compile Include="routes\api.js" />
     <Compile Include="routes\translate.js" />
+    <Compile Include="utils\texthelper.js" />
     <Content Include="routes\tts.js" />
+    <Content Include="utils\arrayhelper.js" />
     <Content Include="Web.config" />
     <None Include="Web.Debug.config" />
     <Content Include="package.json" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="utils\" />
     <Folder Include="routes\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->

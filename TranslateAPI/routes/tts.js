@@ -2,6 +2,7 @@ var googleTTS = require('google-tts-api');
 var express = require('express');
 var md5 = require('md5');
 var redis = require("redis");
+var helper = require("../utils/texthelper");
 var router = express.Router();
 var client = redis.createClient(process.env.REDIS_CONNECTION_STRING);
 var expire = process.env.REDIS_EXPIRE;
@@ -27,65 +28,8 @@ function TextsResponse(res, texts, success = false, cache = false) {
     });
 }
 
-function breakSentence(text, maxLength = 200, endSentence = '.') {
-    var breakTexts = [];
-    var size = text.length;
-    var index = 0;
-    var offset = 0;
-
-    while (index < size) {
-        if (index - offset > maxLength || text[index] == '.') {
-            breakTexts.push(text.substring(offset, index));
-            offset = index+1;
-        }
-
-        index++;
-    }
-
-    if (size == index && index > offset + 1) {
-        breakTexts.push(text.substring(offset, size));
-    }
-
-    return breakTexts;
-
-    //var sentences = text.split(endSentence);
-    //var breakTexts = [];
-
-    //for (var i = 0; i < sentences.length;) {
-
-    //    if (sentences[i].length > maxLength) {
-    //        //Try break this sentence with comma
-    //        var breakByCommas = breakSentence(sentences[i], maxLength, ',');
-
-    //        if (breakByCommas.length > 1) {
-
-    //        } else {
-    //            breakTexts.concat(chunkString(sentences[i++], maxLength));
-    //        }
-    //    } else {
-    //        var text = "";
-    //        while (i < sentences.length && text.length + sentences[i].length < maxLength) {
-    //            text += sentences[i++];
-    //        }
-    //        breakTexts.push(text);
-    //    }
-    //}
-
-    return breakTexts;
-}
-
-function trimSentences(text) {
-    var sentences = text.split('.');
-
-    for (var i = 0; i < sentences.length; i++) {
-        sentences[i] = sentences[i].trim();
-    }
-
-    return sentences.join('.');
-}
-
 router.post('/test', function (req, res) {
-    res.json(breakSentence(trimSentences(req.body + "")));
+    res.json(helper.breakParagraph(req.body + ""));
 });
 
 //TTS sentence
@@ -121,19 +65,77 @@ router.post('/sentence', function (req, res) {
     client.get(key, function (err, reply) {
         if (err || reply == undefined) {
 
-            //Do TTS
-            googleTTS(request.text, request.from, request.speed)
-                .then(function (url) {
-                    //Set redis cache
-                    client.set(key, [url], 'EX', expire);
-                    //Send response
-                    TextResponse(res, [url], true, false);
-                })
-                .catch(function (err) {
+            //Break text
+            var breakTexts = helper.breakParagraph(request.text, 200);
+            var urls = Array(breakTexts.length).fill("");
+            var results = Array(breakTexts.length).fill(undefined);
 
-                    //Send response
-                    TextResponse(res, err, false, false);
-                });
+            //Check is done tts
+            function isDone() {
+                for (var i = 0; i < results.length; i++) {
+                    if (results[i] === undefined) return false;
+                }
+
+                return true;
+            }
+
+            //Check if had error
+            function isError() {
+                for (var i = 0; i < results.length; i++) {
+                    if (results[i] === false) return i;
+                }
+
+                return -1;
+            }
+
+            //Response when tts error
+            function error(index) {
+                //Send response
+                TextResponse(res, urls[index], false, false);
+            }
+
+            //Response when tts success
+            function done() {
+                //Set redis cache
+                client.set(key, urls, 'EX', expire);
+                //Send response
+                TextResponse(res, urls, true, false);
+            }
+
+            //Callback when every tts complete
+            function ttsDone() {
+                if (isDone()) {
+                    var errorIndex = isError();
+                    if (errorIndex > 0) {
+                        error(errorIndex);
+                    } else {
+                        done();
+                    }
+                }
+            }
+
+            //Do all tts pararell
+            breakTexts.forEach(function (text, index) {
+                googleTTS(text, request.from, request.speed)
+                    .then(function (url) {
+
+                        //Set url and result success
+                        urls[index] = url;
+                        results[index] = true;
+
+                        //call tts callback
+                        ttsDone();
+                    })
+                    .catch(function (err) {
+
+                        //Set error and result fail
+                        urls[index] = err;
+                        results[index] = false;
+
+                        //call tts callback
+                        ttsDone();
+                    });
+            });
         } else {
 
             //Send response
