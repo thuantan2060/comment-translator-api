@@ -74,21 +74,18 @@ function breakSentence(text, maxLength = 200, endSentence = '.') {
     return breakTexts;
 }
 
-function chunkString(str, len) {
-    var _size = Math.ceil(str.length / len),
-        _ret = new Array(_size),
-        _offset;
+function trimSentences(text) {
+    var sentences = text.split('.');
 
-    for (var _i = 0; _i < _size; _i++) {
-        _offset = _i * len;
-        _ret[_i] = str.substring(_offset, _offset + len);
+    for (var i = 0; i < sentences.length; i++) {
+        sentences[i] = sentences[i].trim();
     }
 
-    return _ret;
+    return sentences.join('.');
 }
 
 router.post('/test', function (req, res) {
-    res.json(breakSentence(req.body + ""));
+    res.json(breakSentence(trimSentences(req.body + "")));
 });
 
 //TTS sentence
