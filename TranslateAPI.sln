@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MTIGoogleTranslateAPI", "MTIGoogleTranslateAPI\MTIGoogleTranslateAPI.njsproj", "{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TranslateAPI", "TranslateAPI\TranslateAPI.njsproj", "{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

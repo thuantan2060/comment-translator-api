@@ -3,7 +3,8 @@ var express = require('express');
 var md5 = require('md5');
 var redis = require("redis");
 var router = express.Router();
-var client = redis.createClient("redis://pub-redis-19523.us-west-2-1.1.ec2.garantiadata.com:19523/0?password=9a0722309074e7b5c018733d801ea381");
+var client = redis.createClient(process.env.REDIS_CONNECTION_STRING);
+var expire = process.env.REDIS_EXPIRE;
 
 //Check redis error
 client.on("error", function (err) {
@@ -47,7 +48,7 @@ router.post('/translate', function (req, res) {
             //Do translate
             translate(text, translateSetting).then(result => {
                 //Set redis cache
-                client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', 3600);
+                client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', expire);
 
                 res.set("from-language", result.from.language.iso);
                 res.set("to-language", translateTo);
