@@ -1,26 +1,23 @@
 {
-  "name": "mtigoogle-translate-api",
+  "name": "translate-api",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
-  "description": "MTIGoogleTranslateAPI",
+  "description": "TranslateAPI",
   "author": {
-    "name": "DELL"
+    "name": "Thuantan2060"
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
     "concat-stream": "^1.6.0",
-    "cookie-parser": "^1.4.0",
-    "debug": "^2.2.0",
-    "express": "^4.14.0",
+    "express": "^4.15.4",
     "google-translate-api": "^2.3.0",
+    "google-tts-api": "0.0.2",
     "md5": "^2.2.1",
-    "morgan": "^1.7.0",
-    "pug": "^2.0.0-beta6",
+    "morgan": "^1.8.2",
     "redis": "^2.8.0",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.4.3"
   },
   "engines": {
     "node": "~6.10.x"
