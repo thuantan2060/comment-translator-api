@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "postinstall": "cd google-translate-api && npm install && cd ../google-translate-token && npm install"
   },
   "description": "TranslateAPI",
   "author": {
