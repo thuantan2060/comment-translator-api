@@ -12,7 +12,7 @@
   "dependencies": {
     "concat-stream": "^1.6.2",
     "express": "^4.16.3",
-    "google-translate-api": "../google-translate-api",
+    "google-translate-api": "file:google-translate-api",
     "google-tts-api": "0.0.2",
     "md5": "^2.2.1",
     "morgan": "^1.9.0",
