@@ -1,0 +1,50 @@
+{
+  "author": {
+    "name": "Matheus Fernandes",
+    "email": "npm@matheus.top",
+    "url": "http://matheus.top"
+  },
+  "bugs": {
+    "url": "https://github.com/matheuss/google-translate-tk/issues"
+  },
+  "dependencies": {
+    "configstore": "^2.0.0",
+    "got": "^6.3.0"
+  },
+  "description": "A package that generates the necessary token to use the Google Translate API for free",
+  "devDependencies": {
+    "ava": "^0.15.2",
+    "webdriverio": "^4.1.1",
+    "xo": "^0.16.0"
+  },
+  "homepage": "https://github.com/matheuss/google-translate-tk#readme",
+  "keywords": [
+    "translate",
+    "translator",
+    "google",
+    "translate",
+    "api",
+    "free",
+    "language",
+    "tk",
+    "token"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "google-translate-token",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheuss/google-translate-tk.git"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "version": "1.0.0",
+  "xo": {
+    "space": 4,
+    "rules": {
+      "xo/no-abusive-eslint-disable": "warn",
+      "no-eval": "warn"
+    }
+  }
+}

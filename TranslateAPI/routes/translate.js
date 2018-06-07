@@ -5,6 +5,8 @@ var redis = require("redis");
 var router = express.Router();
 var client = redis.createClient(process.env.REDIS_CONNECTION_STRING);
 var expire = process.env.REDIS_EXPIRE;
+var limitTokenResuseTime = 20;
+var currentTokenUseTime = 0;
 
 //Check redis error
 client.on("error", function (err) {
@@ -41,6 +43,17 @@ function WordsResponse(res, to, words, success = false, cache = false) {
         words: success ? words : [],
         error: success ? undefined : words
     });
+}
+
+function ClearToken() {
+    //Increate token use
+    currentTokenUseTime++;
+
+    //Reset token
+    if (currentTokenUseTime > limitTokenResuseTime) {
+        translate.clearToken();
+        currentTokenUseTime = 0;
+    }
 }
 
 //Translate sentence
@@ -81,6 +94,10 @@ router.post('/sentence', function (req, res) {
 
                 //Set redis cache
                 client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', expire);
+
+                //Clear token if it get to limit
+                ClearToken();
+
                 //Send response
                 SentenceResponse(res, result.from.language.iso, request.to, result.text, true, false);
             }).catch(err => {
@@ -137,6 +154,9 @@ router.post('/word', function (req, res) {
 
                 //Set redis cache
                 client.set(key, JSON.stringify({ words: [result.text], from: result.from.language.iso }), 'EX', expire);
+
+                //Clear token if it get to limit
+                ClearToken();
 
                 //Send response
                 WordResponse(res, result.from.language.iso, request.to, [result.text], true, false);
@@ -241,6 +261,9 @@ router.post('/words', function (req, res) {
                     }
                 }
             }
+
+            //Clear token if it get to limit
+            ClearToken();
 
             //Do all tts pararell
             request.words.forEach(function (word, index) {

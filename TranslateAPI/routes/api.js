@@ -5,6 +5,8 @@ var redis = require("redis");
 var router = express.Router();
 var client = redis.createClient(process.env.REDIS_CONNECTION_STRING);
 var expire = process.env.REDIS_EXPIRE;
+var limitTokenResuseTime = 20;
+var currentTokenUseTime = 0;
 
 //Check redis error
 client.on("error", function (err) {
@@ -49,6 +51,15 @@ router.post('/translate', function (req, res) {
             translate(text, translateSetting).then(result => {
                 //Set redis cache
                 client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', expire);
+
+                //Increate token use
+                currentTokenUseTime++;
+
+                //Reset token
+                if (currentTokenUseTime > limitTokenResuseTime) {
+                    translate.clearToken();
+                    currentTokenUseTime = 0;
+                }
 
                 res.set("from-language", result.from.language.iso);
                 res.set("to-language", translateTo);

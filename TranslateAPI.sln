@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "TranslateAPI", "TranslateAPI\TranslateAPI.njsproj", "{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "google-translate-token", "..\google-translate-token.njsproj", "{4D190E3E-A5AD-40E8-9726-2FD1759CC3EA}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "google-translate-api", "..\google-translate-api.njsproj", "{62F43E1A-FE6D-4E9A-A196-5F9075A6244F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D9963C2-63C5-4D4B-B1FB-DF3C7837C2E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D190E3E-A5AD-40E8-9726-2FD1759CC3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D190E3E-A5AD-40E8-9726-2FD1759CC3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D190E3E-A5AD-40E8-9726-2FD1759CC3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D190E3E-A5AD-40E8-9726-2FD1759CC3EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62F43E1A-FE6D-4E9A-A196-5F9075A6244F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F43E1A-FE6D-4E9A-A196-5F9075A6244F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F43E1A-FE6D-4E9A-A196-5F9075A6244F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F43E1A-FE6D-4E9A-A196-5F9075A6244F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

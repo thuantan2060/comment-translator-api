@@ -8,6 +8,7 @@
     <NameOfLastUsedPublishProfile>MTIGoogleTranslateAPI20170814014836 - Web Deploy</NameOfLastUsedPublishProfile>
     <Environment>REDIS_CONNECTION_STRING=redis://pub-redis-19523.us-west-2-1.1.ec2.garantiadata.com:19523/0?password=9a0722309074e7b5c018733d801ea381
 REDIS_EXPIRE=3600</Environment>
+    <LastActiveSolutionConfig>Debug|Any CPU</LastActiveSolutionConfig>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
