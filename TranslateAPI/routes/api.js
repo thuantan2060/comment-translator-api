@@ -40,45 +40,56 @@ router.post('/translate', function (req, res) {
         return;
     }
     var key = md5(text) + translateTo;
-    client.get(key, function (err, reply) {
-        if (err || reply == undefined) {
-            //Translate setting
-            var translateSetting = {};
-            translateSetting.to = translateTo;
-            translateSetting.from = autoDetect === "false" ? translateFrom : 'auto';
 
-            //Do translate
-            translate(text, translateSetting).then(result => {
-                //Set redis cache
-                client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', expire);
+    try {
+        client.get(key, function (err, reply) {
+            if (err || reply == undefined) {
+                //Translate setting
+                var translateSetting = {};
+                translateSetting.to = translateTo;
+                translateSetting.from = autoDetect === "false" ? translateFrom : 'auto';
 
-                //Increate token use
-                currentTokenUseTime++;
+                //Do translate
+                translate(text, translateSetting).then(result => {
+                    //Set redis cache
+                    client.set(key, JSON.stringify({ text: result.text, from: result.from.language.iso }), 'EX', expire);
 
-                //Reset token
-                if (currentTokenUseTime > limitTokenResuseTime) {
-                    translate.clearToken();
-                    currentTokenUseTime = 0;
-                }
+                    //Increate token use
+                    currentTokenUseTime++;
 
-                res.set("from-language", result.from.language.iso);
+                    //Reset token
+                    if (currentTokenUseTime > limitTokenResuseTime) {
+                        translate.clearToken();
+                        currentTokenUseTime = 0;
+                    }
+
+                    res.set("from-language", result.from.language.iso);
+                    res.set("to-language", translateTo);
+                    res.set("translate-success", true);
+                    res.set("cache", false);
+                    res.end(result.text);
+                }).catch(err => {
+                    res.set("translate-success", false);
+                    res.end(err);
+                });
+            } else {
+                var translateResult = JSON.parse(reply);
+                res.set("from-language", translateResult.from);
                 res.set("to-language", translateTo);
                 res.set("translate-success", true);
-                res.set("cache", false);
-                res.end(result.text);
-            }).catch(err => {
-                res.set("translate-success", false);
-                res.end(err);
-            });
-        } else {
-            var translateResult = JSON.parse(reply);
-            res.set("from-language", translateResult.from);
-            res.set("to-language", translateTo);
-            res.set("translate-success", true);
-            res.set("cache", true);
-            res.end(translateResult.text);
-        }
-    });
+                res.set("cache", true);
+                res.end(translateResult.text);
+            }
+        });
+    } catch (ex) {
+
+        //Log error
+        console.log(ex);
+
+        //Clear token if error
+        translate.clearToken();
+        currentTokenUseTime = 0;
+    }
 });
 
 

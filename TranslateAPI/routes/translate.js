@@ -86,6 +86,7 @@ router.post('/sentence', function (req, res) {
         return;
     }
     var key = "tlst" + md5(request.text) + request.to;
+
     client.get(key, function (err, reply) {
         if (err || reply == undefined) {
 
@@ -146,6 +147,7 @@ router.post('/word', function (req, res) {
         return;
     }
     var key = "tlwd" + request.word + request.to;
+
     client.get(key, function (err, reply) {
         if (err || reply == undefined) {
 
@@ -208,6 +210,7 @@ router.post('/words', function (req, res) {
         res.end("No words found");
         return;
     }
+
     var key = "tlmw" + md5(request.words.join("")) + request.to;
     client.get(key, function (err, reply) {
         if (err || reply == undefined) {
